@@ -6,22 +6,35 @@ package cmd
 
 import (
 	"fmt"
-
+    "log"
+    "io/ioutil"
+    "net/http"
 	"github.com/spf13/cobra"
 )
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "A command to delete a word in the dictionary",
+	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("delete called")
+        if len(args) != 1{
+            log.Fatalln(fmt.Errorf("Wrong number of arguments to 'delete'"))
+        }
+        fmt.Println(args)
+        resp, err := http.Get("http://localhost:8080/delete/"+args[0])
+        if err != nil {
+            log.Fatalln(err)
+        }
+        //We Read the response body on the line below.
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalln(err)
+        }
+        //Convert the body to type string
+        sb := string(body)
+        log.Printf(sb)
 	},
 }
 

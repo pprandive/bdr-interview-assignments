@@ -64,5 +64,17 @@ func search(c *gin.Context) {
 }
 
 func delete(c *gin.Context) {
-    c.IndentedJSON(http.StatusOK, nil)
+    key := c.Param("key")
+
+    dict.dictionaryGuard.RLock()  //A read lock
+    lib.Delete(dict.root, key, 0)
+    dict.dictionaryGuard.RUnlock()
+
+    /*message := ""
+    if found == true {
+        message = key+" is found."
+    } else{
+        message = key+" is not found."
+    }*/
+    c.IndentedJSON(http.StatusOK, "")
 }

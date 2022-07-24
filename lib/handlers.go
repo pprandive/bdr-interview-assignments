@@ -1,7 +1,7 @@
 package lib
 
 import (
-    _ "fmt"
+    "fmt"
 )
 
 const total_alphabets = 26
@@ -49,3 +49,38 @@ func Search(root *Node, key string) bool{
     return temp.endOfWord
 }
 
+func IsEmpty(root *Node) bool{
+    for i := 0; i< total_alphabets; i++{
+        if root.children[i] != nil{
+            return false
+        }
+    }
+    return true
+}
+
+func Delete(root *Node, key string, dep int) *Node{
+    if root == nil{
+        return nil
+    }
+    fmt.Println("Inside delete")
+    if dep == len(key){
+        if root.endOfWord == true {
+            root.endOfWord = false
+        }
+
+        if IsEmpty(root){
+            root = nil
+        }
+
+        return root
+    }
+
+    index := key[dep] - 'a'
+    root.children[index] = Delete(root.children[index], key, dep +1)
+
+    if IsEmpty(root) && root.endOfWord == false{
+        root = nil
+    }
+
+    return root
+}
