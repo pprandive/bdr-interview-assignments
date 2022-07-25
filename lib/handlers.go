@@ -78,9 +78,9 @@ func Delete(root *Node, key string, dep int) *Node{
 
         root.nodeGuard.Lock()
         if IsEmpty(root){
+            root.nodeGuard.Unlock()
             root = nil
         }
-        root.nodeGuard.Unlock()
 
         return root
     }
@@ -90,9 +90,9 @@ func Delete(root *Node, key string, dep int) *Node{
 
     root.nodeGuard.Lock()
     if IsEmpty(root) && root.endOfWord == false{
+        root.nodeGuard.Unlock()
         root = nil
     }
-    root.nodeGuard.Unlock()
 
     return root
 }
