@@ -3,7 +3,7 @@ package main
 import (
     "fmt"
     "net/http"
-    "sync"
+    _ "sync"
 
     "github.com/gin-gonic/gin"
 
@@ -14,7 +14,7 @@ type dictionary struct{
 
     root *lib.Node
     //Read write lock
-    dictionaryGuard sync.RWMutex
+    //dictionaryGuard sync.RWMutex
 }
 
 var dict dictionary
@@ -39,9 +39,9 @@ func insert(c *gin.Context) {
 
     key := c.Param("key")
 
-    dict.dictionaryGuard.Lock() //Write lock
+    //dict.dictionaryGuard.Lock() //Write lock
     lib.InsertNewNode(dict.root, key)
-    dict.dictionaryGuard.Unlock()
+    //dict.dictionaryGuard.Unlock()
 
     c.IndentedJSON(http.StatusOK, key)
 }
@@ -50,9 +50,9 @@ func search(c *gin.Context) {
 
     key := c.Param("key")
 
-    dict.dictionaryGuard.RLock()  //A read lock
+    //dict.dictionaryGuard.RLock()  //A read lock
     found := lib.Search(dict.root, key)
-    dict.dictionaryGuard.RUnlock()
+    //dict.dictionaryGuard.RUnlock()
 
     message := ""
     if found == true {
@@ -66,9 +66,9 @@ func search(c *gin.Context) {
 func delete(c *gin.Context) {
     key := c.Param("key")
 
-    dict.dictionaryGuard.RLock()  //A read lock
+    //dict.dictionaryGuard.Lock()  //A read lock
     lib.Delete(dict.root, key, 0)
-    dict.dictionaryGuard.RUnlock()
+    //dict.dictionaryGuard.Unlock()
 
     /*message := ""
     if found == true {
